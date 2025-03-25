@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortify - About Us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5', 
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a href="/features" class="text-sm font-medium text-white transition-all">Features</a>
+                        <a href="/docs" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Documentation</a>
+                        <a href="/about" class="text-sm font-medium text-gray-300 hover:text-white transition-all">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24">
+        <!-- About Hero -->
+        <section class="relative">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fortify Logo" class="h-32 w-auto mx-auto mb-8">
+                    <h1 class="text-4xl font-bold text-white mb-6">About Fortify</h1>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        A student-driven initiative to make security scanning accessible, private, and accurate
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission -->
+        <section class="border-t border-dark-800/40 bg-dark-900/40">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                <div class="mb-16">
+                    <h2 class="text-3xl font-bold text-white mb-6">Our Mission</h2>
+                    <p class="text-lg text-gray-400 leading-relaxed">
+                        Born as a college project, Fortify aims to democratize security scanning by providing a free, privacy-focused alternative to commercial solutions. We believe that robust security tools should be accessible to everyone, from individual developers to small businesses.
+                    </p>
+                </div>
+
+                <!-- What Sets Us Apart -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                        <h3 class="text-xl font-semibold text-white mb-4">Privacy First</h3>
+                        <p class="text-gray-400">
+                            Unlike traditional antivirus solutions like Avast, we don't store or sell your data. Your scans remain completely private and are processed in real-time without persistent storage.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                        <h3 class="text-xl font-semibold text-white mb-4">Curated Database</h3>
+                        <p class="text-gray-400">
+                            While we respect VirusTotal as the industry standard, we take a different approach. Our carefully curated database focuses on minimizing false positives, giving you more accurate and actionable results.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                        <h3 class="text-xl font-semibold text-white mb-4">Free & Open</h3>
+                        <p class="text-gray-400">
+                            As a student project, we're committed to keeping Fortify free and accessible. We believe in transparency and continuous improvement through community feedback.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                        <h3 class="text-xl font-semibold text-white mb-4">Focused Scope</h3>
+                        <p class="text-gray-400">
+                            While we may not match the breadth of VirusTotal's multi-vendor approach, our specialized focus allows us to excel in specific security domains while maintaining high accuracy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Student Project -->
+        <section class="border-t border-dark-800/40">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-white mb-6">A Student Initiative</h2>
+                    <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                        Fortify started as a college project with a simple goal: to make security scanning more accessible and privacy-focused. While we acknowledge industry leaders like VirusTotal as our inspiration, we're carving our own path by prioritizing user privacy and scan accuracy.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. A student project for the community.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

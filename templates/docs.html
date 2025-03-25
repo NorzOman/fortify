@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortify - Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5', 
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a href="/features" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Features</a>
+                        <a href="/docs" class="text-sm font-medium text-white transition-all">Documentation</a>
+                        <a href="/about" class="text-sm font-medium text-gray-300 hover:text-white transition-all">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Documentation Header -->
+            <div class="mb-12">
+                <h1 class="text-4xl font-bold text-white mb-4">API Documentation</h1>
+                <p class="text-xl text-gray-400">Complete reference for the Fortify API</p>
+            </div>
+
+            <!-- Left sidebar + Main content -->
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Left Sidebar -->
+                <div class="lg:w-64 flex-shrink-0">
+                    <div class="sticky top-24">
+                        <nav class="space-y-1">
+                            <a href="#getting-started" class="block px-3 py-2 text-sm font-medium text-white bg-dark-800/40 rounded-lg">Getting Started</a>
+                            <a href="#authentication" class="block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800/40 rounded-lg">Authentication</a>
+                            <a href="#endpoints" class="block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800/40 rounded-lg">API Endpoints</a>
+                            <a href="#rate-limits" class="block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800/40 rounded-lg">Rate Limits</a>
+                            <a href="#errors" class="block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800/40 rounded-lg">Error Handling</a>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="flex-1">
+                    <!-- Getting Started -->
+                    <section id="getting-started" class="mb-12">
+                        <h2 class="text-2xl font-bold text-white mb-6">Getting Started</h2>
+                        <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                            <p class="text-gray-400 mb-4">To use the Fortify API, you'll need:</p>
+                            <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                <li>An API key (get one by signing up)</li>
+                                <li>Basic understanding of REST APIs</li>
+                                <li>A tool to make HTTP requests (curl, Postman, etc.)</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Authentication -->
+                    <section id="authentication" class="mb-12">
+                        <h2 class="text-2xl font-bold text-white mb-6">Authentication</h2>
+                        <div class="space-y-6">
+                            <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                                <h3 class="text-lg font-semibold text-white mb-4">Get API Token</h3>
+                                <div class="bg-dark-900 rounded-lg p-4 mb-4">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-400">GET</span>
+                                        <code class="text-sm text-gray-300">/get_token</code>
+                                    </div>
+                                    <div class="border-t border-dark-700 pt-4 mt-4">
+                                        <pre class="text-sm text-gray-300">curl -X GET https://vault-7-rebooted.vercel.app/get_token</pre>
+                                    </div>
+                                </div>
+                                <p class="text-gray-400 text-sm">Returns a token valid for 1 hour</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- API Endpoints -->
+                    <section id="endpoints" class="mb-12">
+                        <h2 class="text-2xl font-bold text-white mb-6">API Endpoints</h2>
+                        
+                        <!-- File Scan -->
+                        <div class="mb-8 p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                            <h3 class="text-lg font-semibold text-white mb-4">File Scan</h3>
+                            <div class="bg-dark-900 rounded-lg p-4 mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-400">POST</span>
+                                    <code class="text-sm text-gray-300">/file_scan</code>
+                                </div>
+                                <div class="border-t border-dark-700 pt-4 mt-4">
+                                    <pre class="text-sm text-gray-300">curl -X POST https://vault-7-rebooted.vercel.app/file_scan \
+-H "Authorization: Bearer {token}" \
+-H "Content-Type: multipart/form-data" \
+-F "file=@/path/to/file"</pre>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-medium text-white mb-2">Parameters</h4>
+                                    <table class="w-full text-sm">
+                                        <tr class="border-b border-dark-700">
+                                            <td class="py-2 text-gray-400">file</td>
+                                            <td class="py-2 text-gray-400">Required. The file to scan</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-white mb-2">Response</h4>
+                                    <pre class="bg-dark-900 rounded-lg p-4 text-sm text-gray-300">{
+  "scan_id": "abc123",
+  "status": "completed",
+  "results": {
+    "malicious": false,
+    "score": 0,
+    "detections": []
+  }
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- URL Scan -->
+                        <div class="mb-8 p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                            <h3 class="text-lg font-semibold text-white mb-4">URL Scan</h3>
+                            <div class="bg-dark-900 rounded-lg p-4 mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-gray-400">POST</span>
+                                    <code class="text-sm text-gray-300">/url_scan</code>
+                                </div>
+                                <div class="border-t border-dark-700 pt-4 mt-4">
+                                    <pre class="text-sm text-gray-300">curl -X POST https://vault-7-rebooted.vercel.app/url_scan \
+-H "Authorization: Bearer {token}" \
+-H "Content-Type: application/json" \
+-d '{"url": "https://example.com"}'</pre>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-medium text-white mb-2">Parameters</h4>
+                                    <table class="w-full text-sm">
+                                        <tr class="border-b border-dark-700">
+                                            <td class="py-2 text-gray-400">url</td>
+                                            <td class="py-2 text-gray-400">Required. The URL to scan</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-white mb-2">Response</h4>
+                                    <pre class="bg-dark-900 rounded-lg p-4 text-sm text-gray-300">{
+  "domain_info": {
+    "registrar": "Example Registrar",
+    "created_date": "2020-01-01"
+  },
+  "risk_score": 2,
+  "risk_level": "SAFE",
+  "security_issues": []
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Rate Limits -->
+                    <section id="rate-limits" class="mb-12">
+                        <h2 class="text-2xl font-bold text-white mb-6">Rate Limits</h2>
+                        <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                            <table class="w-full text-sm">
+                                <tr class="border-b border-dark-700">
+                                    <td class="py-3 text-gray-400">Free tier</td>
+                                    <td class="py-3 text-gray-400">100 requests/day</td>
+                                </tr>
+                                <tr class="border-b border-dark-700">
+                                    <td class="py-3 text-gray-400">Pro tier</td>
+                                    <td class="py-3 text-gray-400">1000 requests/day</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Error Handling -->
+                    <section id="errors">
+                        <h2 class="text-2xl font-bold text-white mb-6">Error Handling</h2>
+                        <div class="p-6 rounded-xl bg-dark-800/40 border border-dark-700/40">
+                            <table class="w-full text-sm">
+                                <tr class="border-b border-dark-700">
+                                    <td class="py-3 text-gray-400">400</td>
+                                    <td class="py-3 text-gray-400">Bad Request - Invalid parameters</td>
+                                </tr>
+                                <tr class="border-b border-dark-700">
+                                    <td class="py-3 text-gray-400">401</td>
+                                    <td class="py-3 text-gray-400">Unauthorized - Invalid token</td>
+                                </tr>
+                                <tr class="border-b border-dark-700">
+                                    <td class="py-3 text-gray-400">429</td>
+                                    <td class="py-3 text-gray-400">Too Many Requests - Rate limit exceeded</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 text-gray-400">500</td>
+                                    <td class="py-3 text-gray-400">Internal Server Error</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/features" class="text-sm text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="/pricing" class="text-sm text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                        <li><a href="/security" class="text-sm text-gray-400 hover:text-white transition-all">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/docs" class="text-sm text-gray-400 hover:text-white transition-all">Documentation</a></li>
+                        <li><a href="/status" class="text-sm text-gray-400 hover:text-white transition-all">API Status</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/privacy" class="text-sm text-gray-400 hover:text-white transition-all">Privacy</a></li>
+                        <li><a href="/terms" class="text-sm text-gray-400 hover:text-white transition-all">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-dark-800/40">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

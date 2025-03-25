@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Fortify</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4', 
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/png">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-8">
+                        <a href="/features" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Features</a>
+                        <a href="/docs" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Documentation</a>
+                        <a href="/about" class="text-sm font-medium text-gray-300 hover:text-white transition-all">About</a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Terms of Service Content -->
+    <main class="flex-grow pt-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h1 class="text-4xl font-bold mb-8">Terms of Service</h1>
+            <p class="text-gray-400 mb-8">Last Updated: January 15, 2024</p>
+
+            <div class="prose prose-invert max-w-none">
+                <p class="text-gray-300 mb-8">
+                    Welcome to Fortify! By accessing or using our services, including our API, online portal, and mobile application, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+                </p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">1. Acceptance of Terms</h2>
+                <p class="text-gray-300 mb-8">
+                    These Terms of Service ("Terms") govern your use of Fortify ("we," "us," or "our") services, which include our API, mobile application, online portal, and any related features, tools, and content (collectively referred to as the "Services"). By registering, accessing, or using our Services, you agree to these Terms.
+                </p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">2. Changes to Terms</h2>
+                <p class="text-gray-300 mb-8">
+                    We reserve the right to modify or revise these Terms at any time, and any changes will be effective upon posting the updated Terms on our website or notifying you by email. Your continued use of the Services after any changes to the Terms will constitute your acceptance of such changes.
+                </p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">3. Account Registration</h2>
+                <p class="text-gray-300 mb-4">To access our API or use certain features of our Services, you may be required to create an account. When registering, you agree to:</p>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2 mb-8">
+                    <li>Provide accurate, current, and complete information about yourself.</li>
+                    <li>Maintain the confidentiality of your account credentials (email and API key) and promptly notify us of any unauthorized use of your account.</li>
+                    <li>Use your account for lawful purposes only.</li>
+                </ul>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">4. Use of Services</h2>
+                <p class="text-gray-300 mb-4">You may use our Services only for lawful purposes, and you agree not to:</p>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2 mb-8">
+                    <li>Use our Services to scan, upload, or distribute illegal, harmful, or malicious content.</li>
+                    <li>Attempt to reverse-engineer, hack, or compromise the security of our Services or API.</li>
+                    <li>Use our Services for any purpose that violates applicable laws or regulations.</li>
+                    <li>Interfere with or disrupt the operation of the Services or servers.</li>
+                </ul>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">5. API Usage and Limits</h2>
+                <ul class="list-disc pl-6 text-gray-300 space-y-2 mb-8">
+                    <li>API Key: Upon registration, you will receive an API key. You are responsible for safeguarding it and ensuring it is not misused.</li>
+                    <li>Usage Limits: We may impose limits on API usage, including rate limits or restrictions on requests.</li>
+                    <li>Abuse Protection: We monitor usage for signs of abuse and may suspend accounts that violate these Terms.</li>
+                </ul>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">6. Disclaimer of Warranties</h2>
+                <p class="text-gray-300 mb-8">
+                    The Services are provided "as is" and "as available," without any warranties, express or implied. We do not guarantee that the Services will be free of errors, interruptions, or security breaches. While we provide scanning services to detect threats, we cannot guarantee 100% accuracy or the absence of harmful content.
+                </p>
+
+                <h2 class="text-2xl font-semibold mt-12 mb-4">7. Contact Us</h2>
+                <p class="text-gray-300 mb-8">
+                    If you have any questions about these Terms of Service, please contact Fortify Support.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/features" class="text-sm text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="/pricing" class="text-sm text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                        <li><a href="/security" class="text-sm text-gray-400 hover:text-white transition-all">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/docs" class="text-sm text-gray-400 hover:text-white transition-all">Documentation</a></li>
+                        <li><a href="/status" class="text-sm text-gray-400 hover:text-white transition-all">API Status</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/privacy" class="text-sm text-gray-400 hover:text-white transition-all">Privacy</a></li>
+                        <li><a href="/terms" class="text-sm text-gray-400 hover:text-white transition-all">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-dark-800/40">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
