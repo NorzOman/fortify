@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Scanner - Fortify Security Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5', 
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'scan': 'scan 3s linear infinite',
+                        'progress': 'progress 2.5s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.webp') }}" type="image/png">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 mb-4">
+                    <svg class="w-4 h-4 animate-pulse-slow" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"/>
+                    </svg>
+                    Secure File Analysis
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Advanced File Security Scanner</h1>
+                <p class="text-gray-400 text-lg">Our cutting-edge scanner analyzes files for potential security threats, malware signatures, and vulnerabilities.</p>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 backdrop-blur-sm">
+                <div class="flex flex-col items-center justify-center">
+                    <div id="dropZone" class="w-full border-2 border-dashed border-dark-600 rounded-lg p-12 text-center cursor-pointer hover:border-blue-400 hover:bg-dark-800/20 transition-all duration-300">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <p class="mt-4 text-sm text-gray-400">Drag and drop your file here, or click to select</p>
+                        <p class="mt-2 text-xs text-gray-500">Supported file types: All formats (Max 3MB)</p>
+                        <input type="file" id="fileInput" class="hidden">
+                    </div>
+
+                    <!-- Loading States -->
+                    <div id="analyzing" class="hidden mt-8 w-full">
+                        <div class="flex flex-col items-center space-y-4">
+                            <div class="relative w-20 h-20">
+                                <div class="absolute inset-0 border-4 border-blue-500/30 animate-spin"></div>
+                                <div class="absolute inset-2 border-4 border-t-blue-500 animate-spin-slow"></div>
+                            </div>
+                            <p class="text-center text-gray-400">Analyzing file structure and contents...</p>
+                            <div class="w-full max-w-xs bg-dark-700/50 rounded-full h-1 overflow-hidden">
+                                <div class="bg-blue-500 h-1 rounded-full animate-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="scanning" class="hidden mt-8 w-full">
+                        <div class="flex flex-col items-center space-y-6">
+                            <div class="relative w-16 h-16">
+                                <svg class="w-16 h-16 animate-pulse text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <div class="absolute top-0 left-0 w-full h-full">
+                                    <div class="h-0.5 w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-scan"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2 text-center">
+                                <p class="text-lg font-medium text-white">Deep Scanning in Progress</p>
+                                <p class="text-sm text-gray-400">Checking against our security database...</p>
+                            </div>
+                            <div class="w-full max-w-md bg-dark-700 rounded-full h-2 overflow-hidden">
+                                <div class="bg-blue-500 h-2 rounded-full animate-scan"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results" class="hidden mt-8 w-full">
+                        <div class="bg-dark-900/50 rounded-lg p-6 border border-dark-700/40">
+                            <div id="resultHeader" class="flex items-center gap-3 mb-4">
+                                <!-- Icon will be injected here -->
+                            </div>
+                            <div class="space-y-4">
+                                <div class="bg-dark-800/40 rounded-lg p-4">
+                                    <p class="text-sm text-gray-400 mb-2">File Name:</p>
+                                    <p id="fileName" class="text-white font-medium"></p>
+                                </div>
+                                <div class="bg-dark-800/40 rounded-lg p-4">
+                                    <p class="text-sm text-gray-400 mb-2">File Hash (MD5):</p>
+                                    <p id="fileHash" class="text-white font-mono text-sm break-all"></p>
+                                </div>
+                                <div class="bg-dark-800/40 rounded-lg p-4">
+                                    <p class="text-sm text-gray-400 mb-2">Scan Result:</p>
+                                    <p id="scanResult" class="text-white font-medium"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const analyzing = document.getElementById('analyzing');
+        const scanning = document.getElementById('scanning');
+        const results = document.getElementById('results');
+        const resultHeader = document.getElementById('resultHeader');
+        const fileName = document.getElementById('fileName');
+        const fileHash = document.getElementById('fileHash');
+        const scanResult = document.getElementById('scanResult');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-400', 'bg-dark-800/20');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-blue-400', 'bg-dark-800/20');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        async function handleFile(file) {
+            if (!file) return;
+            
+            if (file.size > 3 * 1024 * 1024) {
+                alert('File size exceeds 3MB limit for demo version');
+                return;
+            }
+
+            dropZone.classList.add('hidden');
+            analyzing.classList.remove('hidden');
+
+            // Calculate MD5 hash
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const fileContent = e.target.result;
+                const md5Hash = CryptoJS.MD5(CryptoJS.lib.WordArray.create(fileContent)).toString();
+
+                // Artificial delay for analysis phase
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                
+                analyzing.classList.add('hidden');
+                scanning.classList.remove('hidden');
+
+                try {
+                    const response = await fetch('/scan-file', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            filename: file.name,
+                            fileMd5Hash: md5Hash
+                        })
+                    });
+
+                    // Additional artificial delay for scanning phase
+                    await new Promise(resolve => setTimeout(resolve, 2500));
+
+                    const data = await response.json();
+                    scanning.classList.add('hidden');
+                    results.classList.remove('hidden');
+
+                    // Update result header with appropriate icon
+                    const isSafe = data.result === 'File is safe';
+                    resultHeader.innerHTML = `
+                        <svg class="w-6 h-6 ${isSafe ? 'text-green-500' : 'text-red-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            ${isSafe 
+                                ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+                                : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>'
+                            }
+                        </svg>
+                        <h3 class="text-lg font-semibold text-white">Scan Results</h3>
+                    `;
+
+                    // Update file details
+                    fileName.textContent = data.filename;
+                    fileHash.textContent = data.hash;
+                    
+                    // Format and display scan result
+                    if (isSafe) {
+                        scanResult.textContent = data.result;
+                        scanResult.className = 'text-green-500 font-medium';
+                    } else {
+                        const threat = data.result[0][2];
+                        scanResult.textContent = `Threat Detected: ${threat}`;
+                        scanResult.className = 'text-red-500 font-medium';
+                    }
+
+                } catch (error) {
+                    alert('Error scanning file. Please try again.');
+                    location.reload();
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+
+    <style>
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+    </style>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/features" class="text-sm text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="/pricing" class="text-sm text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                        <li><a href="/security" class="text-sm text-gray-400 hover:text-white transition-all">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/docs" class="text-sm text-gray-400 hover:text-white transition-all">Documentation</a></li>
+                        <li><a href="/status" class="text-sm text-gray-400 hover:text-white transition-all">API Status</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/privacy" class="text-sm text-gray-400 hover:text-white transition-all">Privacy</a></li>
+                        <li><a href="/terms" class="text-sm text-gray-400 hover:text-white transition-all">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-dark-800/40">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

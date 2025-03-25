@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Try Fortify Demo - Free Security Scanning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3', 
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.webp') }}" type="image/png">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-4xl font-bold text-white mb-4">Try Fortify For Free</h1>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Experience our powerful security scanning tools without signing up. Choose from our three demo features below.</p>
+            </div>
+
+            <!-- Demo Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- File Scan Card -->
+                <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 hover:border-dark-600 transition-all group">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">File Scanner</h3>
+                        <p class="text-gray-400 mb-8 flex-grow">Upload and scan files for potential security threats, malware, and vulnerabilities.</p>
+                        <a href="/demo/file" class="inline-flex items-center text-white group-hover:translate-x-2 transition-transform">
+                            Try File Scanner
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- URL Scan Card -->
+                <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 hover:border-dark-600 transition-all group">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">URL Scanner</h3>
+                        <p class="text-gray-400 mb-8 flex-grow">Analyze URLs for phishing attempts, malicious content, and security risks.</p>
+                        <a href="/demo/url" class="inline-flex items-center text-white group-hover:translate-x-2 transition-transform">
+                            Try URL Scanner
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Message Scanner Card -->
+                <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 hover:border-dark-600 transition-all group">
+                    <div class="flex flex-col h-full">
+                        <div class="mb-6">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-3">Message Scanner</h3>
+                        <p class="text-gray-400 mb-8 flex-grow">Detect phishing attempts and suspicious content in messages and emails.</p>
+                        <a href="/demo/message" class="inline-flex items-center text-white group-hover:translate-x-2 transition-transform">
+                            Try Message Scanner
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/features" class="text-sm text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="/pricing" class="text-sm text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                        <li><a href="/security" class="text-sm text-gray-400 hover:text-white transition-all">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/docs" class="text-sm text-gray-400 hover:text-white transition-all">Documentation</a></li>
+                        <li><a href="/status" class="text-sm text-gray-400 hover:text-white transition-all">API Status</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/privacy" class="text-sm text-gray-400 hover:text-white transition-all">Privacy</a></li>
+                        <li><a href="/terms" class="text-sm text-gray-400 hover:text-white transition-all">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-dark-800/40">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
