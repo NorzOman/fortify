@@ -8,7 +8,7 @@ app.secret_key = os.urandom(24)
 
 def check_health():
     try:
-        response = requests.get('https://vault-7-rebooted.vercel.app/check_health')
+        response = requests.get('https://vault-7-rebooted.vercel.app/check_health',timeout=5)
         data = response.json()
         if data.get('status') == 'ok':
             return 'Operational'
@@ -107,6 +107,14 @@ def demo():
 def file_scan():
     return render_template('file_scan.html')
 
+@app.route('/demo/url',methods=['GET','POST'])
+def url_scan():
+    return render_template('url_scan.html')
+
+@app.route('/demo/message',methods=['GET','POST'])
+def message_scan():
+    return render_template('message_scan.html')
+
 @app.route('/scan-file',methods=['POST'])
 def scan_file():
     data = request.get_json()
@@ -134,7 +142,7 @@ def scan_file():
     scan_result = scan_response.json()['result']
 
     if not scan_result:
-        result = 'File is safe'
+        result = 'Failed to query the backend'
     else:
         result = scan_result
 
@@ -143,9 +151,75 @@ def scan_file():
         'filename': filename,
         'hash': file_md5_hash
     })
-    print('--------------------------------')
-    print(final_result)
     return final_result
+
+@app.route('/scan-url',methods=['POST'])
+def scan_url():
+    data = request.get_json()
+    url = data.get('url')
+
+    token_response = requests.get('https://vault-7-rebooted.vercel.app/get_token')
+    token = token_response.json()['token']
+
+    scan_data = {
+        "token": token,
+        "url": url
+    }
+
+    scan_response = requests.post(
+        'https://vault-7-rebooted.vercel.app/url_scan',
+        json=scan_data,
+        headers={'Content-Type': 'application/json'}
+    )
+
+    scan_result = scan_response.json()['result']
+
+    if not scan_result:
+        result = 'Failed to query the backend'
+    else:
+        result = scan_result
+
+    final_result = jsonify({
+        'result': result,
+        'url': url
+    })
+    return final_result
+
+@app.route('/scan-message',methods=['POST'])
+def scan_message():
+    data = request.get_json()
+    message = data.get('message')
+    
+    token_response = requests.get('https://vault-7-rebooted.vercel.app/get_token')
+    token = token_response.json()['token']
+
+    scan_data = {
+        "token": token,
+        "message": message
+    }
+
+    scan_response = requests.post(
+        'https://vault-7-rebooted.vercel.app/message_scan',
+        json=scan_data,
+        headers={'Content-Type': 'application/json'}
+    )
+
+    response_data = scan_response.json()
+
+    # Sample Response
+    # {'status': 'success', 'data': {'result': 'safe', 'reason': 'This message, "This is a test", contains no suspicious elements such as urgent action, links, requests for sensitive information, or poor grammar/spelling. It appears to be a simple test message, likely from a legitimate source. Therefore, I classify it as \'Safe\'.'}}
+    
+    if not response_data.get('data'):
+        result = 'Failed to query the backend'
+    else:
+        result = {
+            'result': response_data['data']['result'],
+            'reason': response_data['data']['reason']
+        }
+
+    print(result)
+
+    return jsonify({'result': result})
 
 if __name__ == '__main__':
     app.run(debug=True)

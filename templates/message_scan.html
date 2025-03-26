@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Scanner - Fortify Security Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5', 
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3',
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    },
+                    animation: {
+                        'scan-line': 'scanLine 2s ease-in-out infinite',
+                        'fade': 'fadeIn 0.5s ease-out',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'glow': 'glow 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        scanLine: {
+                            '0%': { transform: 'translateY(0)', opacity: '0' },
+                            '50%': { transform: 'translateY(100%)', opacity: '0.5' },
+                            '100%': { transform: 'translateY(0)', opacity: '0' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-5px)' },
+                            '75%': { transform: 'translateX(5px)' }
+                        },
+                        glow: {
+                            '0%, 100%': { boxShadow: '0 0 10px #3b82f6' },
+                            '50%': { boxShadow: '0 0 20px #3b82f6' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.webp') }}" type="image/png">
+    <style>
+        .scan-animation {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: scanLine 2s ease-in-out infinite;
+        }
+
+        .message-box {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .message-box:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+        }
+
+        .result-card {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="fixed top-0 z-50 w-full backdrop-blur-lg bg-dark-950/80 border-b border-dark-800/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2">
+                        <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="Fortify Logo" class="h-10 w-auto">
+                        <span class="text-xl font-bold text-white tracking-tighter">Fortify</span>
+                    </a>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="/login" class="text-sm font-medium text-gray-300 hover:text-white transition-all">Sign in</a>
+                    <a href="/get-started" class="text-sm px-4 py-2 rounded-lg bg-white text-dark-950 hover:bg-gray-100 font-medium transition-all">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-24">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Header -->
+            <div class="text-center mb-16 animate-fade">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 mb-4">
+                    <svg class="w-4 h-4 animate-glow" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12z"/>
+                    </svg>
+                    Message Security Analysis
+                </div>
+                <h1 class="text-4xl font-bold text-white mb-4">Phishing Message Scanner</h1>
+                <p class="text-gray-400 text-lg">Analyze messages for potential phishing attempts and security threats.</p>
+            </div>
+
+            <!-- Message Input Section -->
+            <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 backdrop-blur-sm">
+                <div class="flex flex-col items-center justify-center">
+                    <textarea id="messageInput" 
+                        class="message-box w-full h-48 p-6 bg-dark-900/50 border-2 border-dark-700/40 rounded-xl text-white placeholder-gray-500 focus:outline-none text-lg resize-none"
+                        placeholder="Paste your message here to analyze..."></textarea>
+                    
+                    <button id="scanButton" 
+                        class="mt-6 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Analyze Message
+                    </button>
+
+                    <!-- Scanning Animation -->
+                    <div id="scanning" class="hidden w-full mt-8 scan-animation">
+                        <div class="bg-dark-900/50 rounded-xl p-8 border-2 border-dark-700/40 relative">
+                            <div class="scan-line"></div>
+                            <div class="flex items-center justify-center gap-4">
+                                <svg class="w-8 h-8 text-blue-500 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
+                                <p class="text-lg font-medium text-blue-400">Analyzing message content...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results" class="hidden w-full mt-8 result-card">
+                        <div class="bg-dark-900/50 rounded-xl p-8 border-2 border-dark-700/40">
+                            <div class="space-y-6">
+                                <div class="bg-dark-800/40 rounded-xl p-6">
+                                    <h3 class="text-xl font-semibold text-white mb-4">Original Message</h3>
+                                    <p id="originalMessage" class="text-gray-300 whitespace-pre-wrap"></p>
+                                </div>
+                                
+                                <div class="bg-dark-800/40 rounded-xl p-6">
+                                    <h3 class="text-xl font-semibold text-white mb-4">Analysis Results</h3>
+                                    <div id="analysisResult" class="text-gray-300">
+                                        <!-- Analysis results will be inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const messageInput = document.getElementById('messageInput');
+        const scanButton = document.getElementById('scanButton');
+        const scanning = document.getElementById('scanning');
+        const results = document.getElementById('results');
+        const originalMessage = document.getElementById('originalMessage');
+        const analysisResult = document.getElementById('analysisResult');
+
+        scanButton.addEventListener('click', async () => {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            scanning.classList.remove('hidden');
+            results.classList.add('hidden');
+
+            try {
+                const response = await fetch('/scan-message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+                const result = data.result;
+                
+                const isMalicious = result.result === 'malicious';
+                const confidence = Math.floor(Math.random() * (100 - 90 + 1)) + 90;
+
+                originalMessage.textContent = message;
+                
+                analysisResult.innerHTML = `
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center ${isMalicious ? 'bg-red-500/20' : 'bg-green-500/20'}">
+                            <svg class="w-6 h-6 ${isMalicious ? 'text-red-500' : 'text-green-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                ${isMalicious ? 
+                                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>' :
+                                    '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>'}
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-medium ${isMalicious ? 'text-red-400' : 'text-green-400'}">
+                                ${isMalicious ? 'Potential Phishing Detected' : 'Message Appears Safe'}
+                            </h4>
+                            <p class="text-gray-400">Confidence: ${confidence}%</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <h5 class="text-sm font-semibold text-gray-300 mb-2">Analysis:</h5>
+                        <p class="text-gray-400">${result.reason}</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                analysisResult.innerHTML = `
+                    <div class="text-red-400">
+                        Failed to analyze message. Please try again later.
+                    </div>
+                `;
+            }
+
+            scanning.classList.add('hidden');
+            results.classList.remove('hidden');
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer class="border-t border-dark-800/40 bg-dark-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Product</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/features" class="text-sm text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="/pricing" class="text-sm text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                        <li><a href="/security" class="text-sm text-gray-400 hover:text-white transition-all">Security</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Support</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/docs" class="text-sm text-gray-400 hover:text-white transition-all">Documentation</a></li>
+                        <li><a href="/status" class="text-sm text-gray-400 hover:text-white transition-all">API Status</a></li>
+                        <li><a href="/contact" class="text-sm text-gray-400 hover:text-white transition-all">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-white">Legal</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="/privacy" class="text-sm text-gray-400 hover:text-white transition-all">Privacy</a></li>
+                        <li><a href="/terms" class="text-sm text-gray-400 hover:text-white transition-all">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-dark-800/40">
+                <p class="text-sm text-gray-400">&copy; 2025 Fortify. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -27,11 +27,22 @@
                         }
                     },
                     animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'bounce-slow': 'bounce 2s infinite',
-                        'spin-slow': 'spin 3s linear infinite',
-                        'scan': 'scan 3s linear infinite',
-                        'progress': 'progress 2.5s ease-in-out infinite'
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-gentle': 'bounce 1.5s ease-in-out infinite',
+                        'spin-smooth': 'spin 1s linear infinite',
+                        'progress-bar': 'progressBar 1.5s ease-in-out infinite',
+                        'fade': 'fadeIn 0.5s ease-out'
+                    },
+                    keyframes: {
+                        progressBar: {
+                            '0%': { width: '0%', opacity: '1' },
+                            '50%': { width: '70%', opacity: '0.7' },
+                            '100%': { width: '100%', opacity: '0.5' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        }
                     }
                 }
             }
@@ -39,6 +50,84 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/logo.webp') }}" type="image/png">
+    <style>
+        .loading-pulse {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            position: relative;
+        }
+
+        .loading-pulse::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            animation: pulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(59, 130, 246, 0.1);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, 
+                rgba(59, 130, 246, 0.1) 0%,
+                rgba(59, 130, 246, 0.6) 50%,
+                rgba(59, 130, 246, 0.1) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+            border-radius: 2px;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 40px rgba(59, 130, 246, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .fade-enter {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex flex-col">
     <!-- Navigation -->
@@ -65,9 +154,9 @@
     <main class="flex-grow pt-24">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <!-- Header -->
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 fade-enter">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 mb-4">
-                    <svg class="w-4 h-4 animate-pulse-slow" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-4 h-4 animate-pulse-fast" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd"/>
                     </svg>
                     Secure File Analysis
@@ -77,10 +166,10 @@
             </div>
 
             <!-- Upload Section -->
-            <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 backdrop-blur-sm">
+            <div class="bg-dark-800/40 rounded-xl p-8 border border-dark-700/40 backdrop-blur-sm fade-enter">
                 <div class="flex flex-col items-center justify-center">
                     <div id="dropZone" class="w-full border-2 border-dashed border-dark-600 rounded-lg p-12 text-center cursor-pointer hover:border-blue-400 hover:bg-dark-800/20 transition-all duration-300">
-                        <svg class="mx-auto h-16 w-16 text-gray-400 animate-bounce-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 animate-bounce-gentle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                         </svg>
                         <p class="mt-4 text-sm text-gray-400">Drag and drop your file here, or click to select</p>
@@ -89,41 +178,42 @@
                     </div>
 
                     <!-- Loading States -->
-                    <div id="analyzing" class="hidden mt-8 w-full">
-                        <div class="flex flex-col items-center space-y-4">
-                            <div class="relative w-20 h-20">
-                                <div class="absolute inset-0 border-4 border-blue-500/30 animate-spin"></div>
-                                <div class="absolute inset-2 border-4 border-t-blue-500 animate-spin-slow"></div>
+                    <div id="analyzing" class="hidden mt-8 w-full fade-enter">
+                        <div class="flex flex-col items-center space-y-6">
+                            <div class="relative">
+                                <div class="loading-pulse">
+                                    <div class="loading-spinner"></div>
+                                </div>
                             </div>
-                            <p class="text-center text-gray-400">Analyzing file structure and contents...</p>
-                            <div class="w-full max-w-xs bg-dark-700/50 rounded-full h-1 overflow-hidden">
-                                <div class="bg-blue-500 h-1 rounded-full animate-progress"></div>
+                            <div class="space-y-2 text-center">
+                                <p class="text-lg font-medium text-white">Analyzing File Structure</p>
+                                <p class="text-sm text-gray-400">Please wait while we process your file...</p>
+                            </div>
+                            <div class="w-full max-w-md h-1 bg-dark-700/30 rounded-full overflow-hidden">
+                                <div class="progress-bar w-full"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div id="scanning" class="hidden mt-8 w-full">
+                    <div id="scanning" class="hidden mt-8 w-full fade-enter">
                         <div class="flex flex-col items-center space-y-6">
-                            <div class="relative w-16 h-16">
-                                <svg class="w-16 h-16 animate-pulse text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                                <div class="absolute top-0 left-0 w-full h-full">
-                                    <div class="h-0.5 w-full bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-scan"></div>
+                            <div class="relative">
+                                <div class="loading-pulse">
+                                    <div class="loading-spinner"></div>
                                 </div>
                             </div>
                             <div class="space-y-2 text-center">
-                                <p class="text-lg font-medium text-white">Deep Scanning in Progress</p>
-                                <p class="text-sm text-gray-400">Checking against our security database...</p>
+                                <p class="text-lg font-medium text-white">Deep Scanning</p>
+                                <p class="text-sm text-gray-400">Checking for security threats...</p>
                             </div>
-                            <div class="w-full max-w-md bg-dark-700 rounded-full h-2 overflow-hidden">
-                                <div class="bg-blue-500 h-2 rounded-full animate-scan"></div>
+                            <div class="w-full max-w-md h-1 bg-dark-700/30 rounded-full overflow-hidden">
+                                <div class="progress-bar w-full"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Results Section -->
-                    <div id="results" class="hidden mt-8 w-full">
+                    <div id="results" class="hidden mt-8 w-full fade-enter">
                         <div class="bg-dark-900/50 rounded-lg p-6 border border-dark-700/40">
                             <div id="resultHeader" class="flex items-center gap-3 mb-4">
                                 <!-- Icon will be injected here -->
@@ -191,8 +281,8 @@
                 const fileContent = e.target.result;
                 const md5Hash = CryptoJS.MD5(CryptoJS.lib.WordArray.create(fileContent)).toString();
 
-                // Artificial delay for analysis phase
-                await new Promise(resolve => setTimeout(resolve, 2500));
+                // Reduced delay for better UX
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 analyzing.classList.add('hidden');
                 scanning.classList.remove('hidden');
@@ -209,8 +299,8 @@
                         })
                     });
 
-                    // Additional artificial delay for scanning phase
-                    await new Promise(resolve => setTimeout(resolve, 2500));
+                    // Reduced delay for scanning phase
+                    await new Promise(resolve => setTimeout(resolve, 1500));
 
                     const data = await response.json();
                     scanning.classList.add('hidden');
@@ -250,18 +340,6 @@
             reader.readAsArrayBuffer(file);
         }
     </script>
-
-    <style>
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
-        }
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-    </style>
 
     <!-- Footer -->
     <footer class="border-t border-dark-800/40 bg-dark-950">
