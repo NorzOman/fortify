@@ -117,41 +117,60 @@ def message_scan():
 
 @app.route('/scan-file',methods=['POST'])
 def scan_file():
-    data = request.get_json()
-    filename = data.get('filename')
-    file_md5_hash = data.get('fileMd5Hash')
+    try:
+        data = request.get_json()
+        filename = data.get('filename')
+        file_md5_hash = data.get('fileMd5Hash')
 
-    # Get token from API
-    token_response = requests.get('https://vault-7-rebooted.vercel.app/get_token')
-    token = token_response.json()['token']
+        # Get token from API with timeout
+        token_response = requests.get('https://vault-7-rebooted.vercel.app/get_token', timeout=5)
+        token = token_response.json()['token']
 
-    # Send scan request
-    scan_data = {
-        "token": token,
-        "hashes": [
-            [filename, f"md5:{file_md5_hash}"]
-        ]
-    }
+        # Send scan request with timeout
+        scan_data = {
+            "token": token,
+            "hashes": [
+                [filename, f"md5:{file_md5_hash}"]
+            ]
+        }
 
-    scan_response = requests.post(
-        'https://vault-7-rebooted.vercel.app/file_scan',
-        json=scan_data,
-        headers={'Content-Type': 'application/json'}
-    )
+        scan_response = requests.post(
+            'https://vault-7-rebooted.vercel.app/file_scan',
+            json=scan_data,
+            headers={'Content-Type': 'application/json'},
+            timeout=10  # Increased timeout for scan request
+        )
 
-    scan_result = scan_response.json()['result']
+        scan_result = scan_response.json().get('result', [])
 
-    if not scan_result:
-        result = 'Failed to query the backend'
-    else:
-        result = scan_result
+        if not scan_result:
+            return jsonify({
+                'error': 'Failed to query the backend',
+                'result': [['Unknown', 'Unknown', 'error']],
+                'filename': filename,
+                'hash': file_md5_hash
+            }), 500
 
-    final_result = jsonify({
-        'result': result,
-        'filename': filename,
-        'hash': file_md5_hash
-    })
-    return final_result
+        return jsonify({
+            'result': scan_result,
+            'filename': filename,
+            'hash': file_md5_hash
+        })
+
+    except requests.Timeout:
+        return jsonify({
+            'error': 'Request timed out',
+            'result': [['Unknown', 'Unknown', 'timeout']],
+            'filename': filename,
+            'hash': file_md5_hash
+        }), 504
+    except Exception as e:
+        return jsonify({
+            'error': str(e),
+            'result': [['Unknown', 'Unknown', 'error']],
+            'filename': filename,
+            'hash': file_md5_hash
+        }), 500
 
 @app.route('/scan-url',methods=['POST'])
 def scan_url():
@@ -221,5 +240,13 @@ def scan_message():
 
     return jsonify({'result': result})
 
+@app.route('/banner')
+def banner():
+    return render_template('banner.html')
+
+@app.route('/others')
+def others():
+    return render_template('others.html')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5001)

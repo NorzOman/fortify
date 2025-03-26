@@ -288,6 +288,11 @@
                 scanning.classList.remove('hidden');
 
                 try {
+                    // Set timeout for fetch request
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+                    console.log('Sending scan request...');
                     const response = await fetch('/scan-file', {
                         method: 'POST',
                         headers: {
@@ -296,18 +301,26 @@
                         body: JSON.stringify({
                             filename: file.name,
                             fileMd5Hash: md5Hash
-                        })
+                        }),
+                        signal: controller.signal
                     });
 
-                    // Reduced delay for scanning phase
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    clearTimeout(timeout);
 
                     const data = await response.json();
+                    console.log('Scan result:', data);
+
+                    if (!response.ok || data.error) {
+                        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+                    }
+
                     scanning.classList.add('hidden');
                     results.classList.remove('hidden');
 
                     // Update result header with appropriate icon
-                    const isSafe = data.result === 'File is safe';
+                    const scanStatus = data.result[0][2];
+                    const isSafe = scanStatus === 'safe';
+                    
                     resultHeader.innerHTML = `
                         <svg class="w-6 h-6 ${isSafe ? 'text-green-500' : 'text-red-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             ${isSafe 
@@ -323,20 +336,37 @@
                     fileHash.textContent = data.hash;
                     
                     // Format and display scan result
-                    if (isSafe) {
-                        scanResult.textContent = data.result;
+                    if (scanStatus === 'timeout') {
+                        scanResult.textContent = "Scan timed out. Please try again.";
+                        scanResult.className = 'text-yellow-500 font-medium';
+                    } else if (scanStatus === 'error') {
+                        scanResult.textContent = "Error scanning file. Please try again.";
+                        scanResult.className = 'text-red-500 font-medium';
+                    } else if (isSafe) {
+                        scanResult.textContent = "File is safe";
                         scanResult.className = 'text-green-500 font-medium';
                     } else {
-                        const threat = data.result[0][2];
-                        scanResult.textContent = `Threat Detected: ${threat}`;
+                        scanResult.textContent = `Threat Detected: ${scanStatus}`;
                         scanResult.className = 'text-red-500 font-medium';
                     }
 
                 } catch (error) {
-                    alert('Error scanning file. Please try again.');
+                    console.error('Error during scan:', error);
+                    if (error.name === 'AbortError') {
+                        alert('Scan request timed out. Please try again.');
+                    } else {
+                        alert(`Error scanning file: ${error.message}`);
+                    }
                     location.reload();
                 }
             };
+
+            reader.onerror = function(error) {
+                console.error('Error reading file:', error);
+                alert('Error reading file. Please try again.');
+                location.reload();
+            };
+
             reader.readAsArrayBuffer(file);
         }
     </script>

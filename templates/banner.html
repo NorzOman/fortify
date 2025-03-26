@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortify - Security Framework Banner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#e5e5e5',
+                            300: '#d4d4d4',
+                            400: '#a3a3a3', 
+                            500: '#737373',
+                            600: '#525252',
+                            700: '#404040',
+                            800: '#262626',
+                            900: '#171717',
+                            950: '#0a0a0a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-dark-950 text-gray-100 font-[Inter] antialiased min-h-screen flex items-center justify-center p-8">
+    <div class="max-w-full w-full bg-gradient-to-br from-dark-900 to-dark-950 rounded-2xl border border-dark-800/40 shadow-2xl overflow-hidden">
+        <!-- Header with Logo -->
+        <div class="flex items-center justify-between p-8">
+            <img src="{{ url_for('static', filename='images/logo.webp') }}" alt="Fortify Logo" class="h-24 w-auto">
+            <div class="text-left">
+                <h1 class="text-4xl font-bold tracking-tighter text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">
+                    Fortify Security Framework
+                </h1>
+                <p class="mt-4 text-lg text-gray-400">
+                    Enterprise-Grade Security Solutions for Modern Web Applications
+                </p>
+            </div>
+        </div>
+
+        <!-- Feature Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-dark-900/40">
+            <div class="p-4 rounded-xl bg-dark-800/40 border border-dark-700/40 hover:border-dark-600 transition-all">
+                <div class="flex items-center gap-4 mb-4">
+                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-white">URL Scanning</h3>
+                </div>
+                <p class="text-gray-400 leading-relaxed">Real-time URL threat detection powered by learning algorithms. Identifies phishing attempts, malware distribution, and suspicious domains instantly.</p>
+                <ul class="mt-4 space-y-2 text-gray-400">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Phishing Detection
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Malware Analysis
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Domain Reputation
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-4 rounded-xl bg-dark-800/40 border border-dark-700/40 hover:border-dark-600 transition-all">
+                <div class="flex items-center gap-4 mb-4">
+                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-white">Message Detection</h3>
+                </div>
+                <p class="text-gray-400 leading-relaxed">AI-powered message analysis system that identifies potential threats, phishing attempts, and spam content using advanced natural language processing.</p>
+                <ul class="mt-4 space-y-2 text-gray-400">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Spam Detection
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Sentiment Analysis
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Content Verification
+                    </li>
+                </ul>
+            </div>
+
+            <div class="p-4 rounded-xl bg-dark-800/40 border border-dark-700/40 hover:border-dark-600 transition-all">
+                <div class="flex items-center gap-4 mb-4">
+                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-white">File Scanning</h3>
+                </div>
+                <p class="text-gray-400 leading-relaxed">No False Positives file analysis system that detects malware, ransomware, and other malicious content using static detection and coming up sandboxed dynamic analysis soon.</p>
+                <ul class="mt-4 space-y-2 text-gray-400">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Malware Detection
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Virus Scanning
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        Binary Analysis
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-dark-950/50 border-t border-dark-800/40">
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white">97.4%</div>
+                <div class="mt-2 text-gray-400">Threat Detection Rate</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white">500ms</div>
+                <div class="mt-2 text-gray-400">Average Response Time</div>
+            </div>
+            <div class="text-center">
+                <div class="text-4xl font-bold text-white">24/7</div>
+                <div class="mt-2 text-gray-400">Real-time Monitoring</div>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="p-8 bg-dark-950/50 border-t border-dark-800/40">
+            <h3 class="text-xl font-semibold text-white text-center mb-4">Powered by Fortify Team</h3>
+            <div class="flex flex-wrap justify-center gap-4 text-center">
+                <div class="px-4 py-2 rounded-lg bg-dark-800/40 text-gray-300 hover:bg-dark-700/40 transition-all">
+                    Flask Backend
+                </div>
+                <div class="px-4 py-2 rounded-lg bg-dark-800/40 text-gray-300 hover:bg-dark-700/40 transition-all">
+                    Tailwind Frontend
+                </div>
+                <div class="px-4 py-2 rounded-lg bg-dark-800/40 text-gray-300 hover:bg-dark-700/40 transition-all">
+                    ML-powered Analysis
+                </div>
+                <div class="px-4 py-2 rounded-lg bg-dark-800/40 text-gray-300 hover:bg-dark-700/40 transition-all">
+                    Vercel Infrastructure
+                </div>
+                <div class="px-4 py-2 rounded-lg bg-dark-800/40 text-gray-300 hover:bg-dark-700/40 transition-all">
+                    Cross Platform
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 bg-dark-950 border-t border-dark-800/40 text-center">
+            <p class="text-sm text-gray-500">Created by Team Fortify | Advanced Web Security Project</p>
+            <p class="mt-2 text-sm text-gray-600">Protecting digital assets with next-generation security solutions</p>
+        </div>
+    </div>
+</body>
+</html>
